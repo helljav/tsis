@@ -6,9 +6,11 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +26,7 @@ import mx.uam.tsis.ejemplobackend.negocio.modelo.Alumno;
 @RestController
 @Slf4j
 public class AlumnoController {
-	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AlumnoController.class);
+	//private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AlumnoController.class);
 	
 	// La "base de datos"
 	private Map <Integer, Alumno> alumnoRepository = new HashMap <>();
@@ -71,19 +73,47 @@ public class AlumnoController {
 		
 		if(alumno != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(alumno);
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
 		
-		
-	}
-	/*
-	public update() {
 		
 	}
 	
-	public delete() {
+	/**
+	 * Se optiene la id del alumno que se va a modificar del archivo JSON
+	 * @param updateAlumno
+	 * @return
+	 */
+	@PutMapping(path = "/alumnos", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity <?> update(@RequestBody Alumno updateAlumno) {
+		Alumno alumno = alumnoRepository.get(updateAlumno.getMatricula());
 		
-	}*/
+		if(alumno!=null) {
+			log.info("Si existe un alumno "+updateAlumno);
+			alumnoRepository.replace(updateAlumno.getMatricula(), updateAlumno);
+			alumno = alumnoRepository.get(updateAlumno.getMatricula());
+			return ResponseEntity.status(HttpStatus.OK).body(alumno);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+		
+	}
+	
+	
+	@DeleteMapping(path = "/alumnos/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity <?> delete(@PathVariable("matricula") Integer matricula) {
+		Alumno alumno = alumnoRepository.get(matricula);
+		if(alumno!=null) {
+			alumnoRepository.remove(matricula);
+			log.info("El alumno fue eliminado con matricula: "+ matricula);
+			return ResponseEntity.status(HttpStatus.OK).body(alumnoRepository.get(matricula));
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+				
+	}
  
 }

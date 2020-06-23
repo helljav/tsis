@@ -1,5 +1,146 @@
-<html>
-	<body>
-		Hola Spring Boot!
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api alumno</title>
+    
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+     <!-- jQuery library -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+     <!-- Popper JS -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+ 
+     <!-- Latest compiled JavaScript -->
+ 
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
+ 
+    <style>
+        
+       
+        
+        
+        
+       
+    </style>
+</head>
+<body>
+
+	<div  class="container-fluid p-3">
+		<div class="row no-gutter">
+			<div class="col-12">
+				
+					<div class="form-group">
+						<label for="matricula">Matricula</label>
+						<input type="text" class="form-control" id="matricula" placeholder="Ingresa la matricula">
+					</div>
+					<div class="form-group">
+						<label for="name">Nombre</label>
+						<input type="text" class="form-control" id="name" placeholder="Ingresa el nombre">
+					</div>
+					<div class="form-group">
+						<label for="carrera">Carrera</label>
+						<input type="text" class="form-control" id="carrera" placeholder="Ingresa la carrera">
+					</div>
+					<button type="submit" class="btn btn-primary" id="post">Enviar</button>
+					<button type="submit" class="btn btn-light" id="get">Recuperar</button>	
+					
+					<div id="resultado"></div>
+			</div>
+			
+			
+		</div>
+	
+	</div>
+
+	
+ 
+
+
+<script>
+   
+    // *******************************************************************************************************************************
+
+    $(document).ready(function(){
+         
+        $("#get").click(function(){
+        	$("#resultado").empty();
+        	var mat = $("#matricula").val();
+        	if(mat === ""){
+        		$.get("http://localhost:8080/alumnos", function(data){
+        			$("#resultado").append($("<ol>"));
+        			for(var i = 0; i<data.length;i++){
+        				$("#resultado").append($("<li>" +
+        						"Matricula: " +data[i].matricula + "<br> " +
+        						"Nombre: " +data[i].nombre + "<br> " +
+        						"Carrera: " +data[i].carrera + "<br> " +
+        				
+        				
+        				"</li>"));		
+        			}
+        			$("#resultado").append($("</ol>"));
+           		 
+           	    });   			  
+   		 	}
+        	else{
+        		$.get("http://localhost:8080/alumnos/"+mat, function(data){
+        			$("#resultado").append($("<ol>"));
+        				$("#resultado").append($("<li>" +
+        						"Matricula: " +data.matricula + "<br> " +
+        						"Nombre: " +data.nombre + "<br> " +
+        						"Carrera: " +data.carrera + "<br> " +
+        				        				
+        				"</li> </ol>"));		
+           	    });
+        		
+        	}
+        	 
+        });
+        
+        
+        
+        
+        
+        
+        $("#post").click(function(){
+        	var parametros = JSON.stringify({
+        			matricula: $("#matricula").val(),
+                	nombre: $("#name").val(),
+                	carrera: $("#carrera").val()        			
+        	});
+        	
+
+        	/*var data = JSON.parse('{"matricula":'+ $("#matricula").val() +', "nombre": "'+ $("#name").val()+'",	"carrera":"'+ carrera+'" }');
+        	alert(typeof(data.matricula));*/
+        	
+        	/*$.post("http://localhost:8080/alumnos",data,
+        		    function(data,status){
+        		      alert("Data: " + data + "\nStatus: " + status);
+        	});*/
+        	$.ajax({
+        	    url: "http://localhost:8080/alumnos",
+        	    type: 'POST',
+        	    dataType: 'json',
+        	    contentType: "application/json; charset=utf-8",
+        	    data: parametros,
+        	    success: function(data,status) {
+        	    	alert("Data: " + data + "\nStatus: " + status);
+        	    }
+        	});
+        	
+        	
+        	
+        	
+        });
+        
+    });
+    
+    
+</script>
+
+   
+</body>
 </html>

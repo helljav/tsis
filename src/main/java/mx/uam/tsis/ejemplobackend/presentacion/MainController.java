@@ -17,7 +17,7 @@ import mx.uam.tsis.ejemplobackend.servicios.AlumnoController;
 @Controller
 @Slf4j
 public class MainController {
-	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AlumnoController.class);
+	//private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AlumnoController.class);
 	@GetMapping("/")
 	public String index() {
 		
