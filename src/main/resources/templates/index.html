@@ -70,7 +70,7 @@
         	$("#resultado").empty();
         	var mat = $("#matricula").val();
         	if(mat === ""){
-        		$.get("http://localhost:8080/alumnos", function(data){
+        		$.get("http://localhost:8080/alumnos", function(data, status){
         			$("#resultado").append($("<ol>"));
         			for(var i = 0; i<data.length;i++){
         				$("#resultado").append($("<li>" +
@@ -82,7 +82,7 @@
         				"</li>"));		
         			}
         			$("#resultado").append($("</ol>"));
-           		 
+        			alert("\nStatus: " + status);           		 
            	    });   			  
    		 	}
         	else{
@@ -112,14 +112,6 @@
                 	carrera: $("#carrera").val()        			
         	});
         	
-
-        	/*var data = JSON.parse('{"matricula":'+ $("#matricula").val() +', "nombre": "'+ $("#name").val()+'",	"carrera":"'+ carrera+'" }');
-        	alert(typeof(data.matricula));*/
-        	
-        	/*$.post("http://localhost:8080/alumnos",data,
-        		    function(data,status){
-        		      alert("Data: " + data + "\nStatus: " + status);
-        	});*/
         	$.ajax({
         	    url: "http://localhost:8080/alumnos",
         	    type: 'POST',
