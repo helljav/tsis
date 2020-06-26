@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 import mx.uam.tsis.ejemplobackend.negocio.modelo.Alumno;
 /**
  * Se encarga de almacenar y recuperar alumnos
@@ -12,6 +14,7 @@ import mx.uam.tsis.ejemplobackend.negocio.modelo.Alumno;
  *
  */
 @Component
+@Slf4j
 public class AlumnoRepository {
 	//La "base de datos"
 	private Map <Integer, Alumno> alumnoRepository = new HashMap<>();
@@ -43,6 +46,7 @@ public class AlumnoRepository {
 	
 	public boolean update(Integer matricula, Alumno update) {
 		if(alumnoRepository.replace(matricula, update)==null) {
+			log.info("Entre Aqui");
 			return false;
 		}
 		else {

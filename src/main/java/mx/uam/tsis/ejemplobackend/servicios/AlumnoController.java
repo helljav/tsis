@@ -3,6 +3,8 @@ package mx.uam.tsis.ejemplobackend.servicios;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,7 +43,7 @@ public class AlumnoController {
 	 */
 	
 	@PostMapping(path = "/alumnos", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity <?> create(@RequestBody Alumno nuevoAlumno) {
+	public ResponseEntity <?> create(@RequestBody @Valid Alumno nuevoAlumno) {
 		
 		// No se deben agregar dos alumnos con la misma matricula
 		
@@ -97,7 +99,7 @@ public class AlumnoController {
 	 * @return
 	 */
 	@PutMapping(path = "/alumnos/{matricula}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity <?> update(@PathVariable("matricula") Integer matricula, @RequestBody Alumno updateAlumno){
+	public ResponseEntity <?> update(@PathVariable("matricula") Integer matricula, @RequestBody  Alumno updateAlumno){
 		
 		Alumno alumno = alumnoService.retrive(matricula);
 		
@@ -126,7 +128,7 @@ public class AlumnoController {
 			return ResponseEntity.status(HttpStatus.OK).body(alumnoService.retrive(matricula));
 		}
 		else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el alumno a eliminar");
 		}
 				
 	}

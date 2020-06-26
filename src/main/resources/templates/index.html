@@ -30,24 +30,28 @@
 <body>
 
 	<div  class="container-fluid p-3">
+	<h2>Registro de alumno</h2>
 		<div class="row no-gutter">
 			<div class="col-12">
-				
+					<form>
+					
 					<div class="form-group">
 						<label for="matricula">Matricula</label>
-						<input type="text" class="form-control" id="matricula" placeholder="Ingresa la matricula">
+						<input type="text" class="form-control" id="matricula" placeholder="Ingresa la matricula" required>
 					</div>
 					<div class="form-group">
 						<label for="name">Nombre</label>
-						<input type="text" class="form-control" id="name" placeholder="Ingresa el nombre">
+						<input type="text" class="form-control" id="name" placeholder="Ingresa el nombre" required>
 					</div>
 					<div class="form-group">
 						<label for="carrera">Carrera</label>
-						<input type="text" class="form-control" id="carrera" placeholder="Ingresa la carrera">
+						<input type="text" class="form-control" id="carrera" placeholder="Ingresa la carrera" required>
 					</div>
 					<button type="submit" class="btn btn-primary" id="post">Enviar</button>
-					<button type="submit" class="btn btn-light" id="get">Recuperar</button>	
-					
+					<button type="submit" class="btn btn-dark" id="get">Recuperar</button>
+					<button type="submit" class="btn btn-danger" id="delete">Eliminar</button>
+					<button type="submit" class="btn btn-warning" id="put">Actualizar</button>	
+					</form>
 					<div id="resultado"></div>
 			</div>
 			
@@ -61,6 +65,7 @@
 
 
 <script>
+    var urlBase = "http://localhost:8080/alumnos"
    
     // *******************************************************************************************************************************
 
@@ -70,7 +75,8 @@
         	$("#resultado").empty();
         	var mat = $("#matricula").val();
         	if(mat === ""){
-        		$.get("http://localhost:8080/alumnos", function(data, status){
+        		$.get(urlBase, function(data, status){
+        			
         			$("#resultado").append($("<ol>"));
         			for(var i = 0; i<data.length;i++){
         				$("#resultado").append($("<li>" +
@@ -82,11 +88,11 @@
         				"</li>"));		
         			}
         			$("#resultado").append($("</ol>"));
-        			alert("\nStatus: " + status);           		 
+        			//alert("\nStatus: " + status);           		 
            	    });   			  
    		 	}
         	else{
-        		$.get("http://localhost:8080/alumnos/"+mat, function(data){
+        		$.get(urlBase+"/"+mat, function(data){
         			$("#resultado").append($("<ol>"));
         				$("#resultado").append($("<li>" +
         						"Matricula: " +data.matricula + "<br> " +
@@ -106,6 +112,7 @@
         
         
         $("#post").click(function(){
+    
         	var parametros = JSON.stringify({
         			matricula: $("#matricula").val(),
                 	nombre: $("#name").val(),
@@ -113,20 +120,72 @@
         	});
         	
         	$.ajax({
-        	    url: "http://localhost:8080/alumnos",
+        	    url: urlBase,
         	    type: 'POST',
         	    dataType: 'json',
         	    contentType: "application/json; charset=utf-8",
         	    data: parametros,
         	    success: function(data,status) {
-        	    	alert("Data: " + data + "\nStatus: " + status);
+        	    	alert(status+"\n Resgatrado ");
+        	 
+        	    },
+        	    error:function(data,status){
+        	    	//alert(status+"\n No se pudo registrar")        	    	
         	    }
-        	});
+        	});        	
         	
-        	
+        });
+        
+        
+        
+        $("#delete").click(function(){
+        	var mat = $("#matricula").val()
+        	$.ajax({
+        		url: urlBase+"/"+mat,
+        	    type: 'DELETE',
+        	    success: function(data,status) {
+        	    	alert("Se elimino correctamente"); 
+        	    	
+        	    },
+        	    error:function(data,status){
+        	    	//alert(status+"\n No se pudo eliminar al alumno")        	    	
+        	    }
+        		
+        	});      	
         	
         	
         });
+        
+        
+        
+        
+        $("#put").click(function(){
+        	var parametros = JSON.stringify({
+        			matricula: $("#matricula").val(),
+                	nombre: $("#name").val(),
+                	carrera: $("#carrera").val()        			
+        	});
+        	
+        	$.ajax({
+        	    url: urlBase+"/"+$("#matricula").val(),
+        	    type: 'PUT',
+        	    dataType: 'json',
+        	    contentType: "application/json; charset=utf-8",
+        	    data: parametros,
+        	    success: function(data,status) {
+        	    	alert(status+"\n Actualizado!! ");
+        	 
+        	    },
+        	    error:function(data,status){
+        	    	//alert(status+"\n No se pudo Actualizar!!!")        	    	
+        	    }
+        	});        	
+        	
+        });       
+                
+
+         
+        
         
     });
     

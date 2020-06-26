@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import mx.uam.tsis.ejemplobackend.datos.AlumnoRepository;
 import mx.uam.tsis.ejemplobackend.negocio.modelo.Alumno;
 
 @Service
+@Slf4j
 public class AlumnoService {
 	@Autowired //Con esto va a realizar la inyeccion de dependencias 
 	private AlumnoRepository alumnoRepository;
@@ -62,8 +64,9 @@ public class AlumnoService {
 	 * @return Si es que por alguna razon falla al actualizar mandara un false, de lo contraio un true
 	 */
 	public boolean update(Integer matricula, Alumno update) {
-		if(matricula == update.getMatricula()) {
+		if(matricula != update.getMatricula()) {
 			if(alumnoRepository.update(matricula, update)==false) {
+				
 				return false;			
 			}
 			return true;
