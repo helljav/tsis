@@ -11,7 +11,7 @@ import mx.uam.tsis.ejemplobackend.servicios.AlumnoController;
 /**
  * Controlador web
  * 
- * @author humbertocervantes
+ * @author HP
  *
  */
 @Controller
