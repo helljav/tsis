@@ -62,6 +62,7 @@ public class AlumnoService {
 	 */
 	
 	public Alumno retrive(Integer matricula) {
+		log.info("EStoy el el retrive");
 		return alumnoRepository.findById(matricula).get();
 	}
 	

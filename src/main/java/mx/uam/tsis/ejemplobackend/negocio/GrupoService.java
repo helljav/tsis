@@ -20,7 +20,11 @@ public class GrupoService {
 	@Autowired
 	private AlumnoService alumnoService;
 	
+	
+	
+	
 	public Grupo create(Grupo nuevo) {
+		log.info("Me llamaron?");
 		return grupoRepository.save(nuevo);
 	}
 	
