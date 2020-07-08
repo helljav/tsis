@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mx.uam.tsis.ejemplobackend.datos.AlumnoRepository;
 
 /**
  * Clase que representa a la entidad Alumno

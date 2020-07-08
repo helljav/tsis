@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,8 +61,9 @@ public class AlumnoService {
 	 * @return Regresa a un alumno base a su matricula (Get)
 	 */
 	
-	public Optional <Alumno> retrive(Integer matricula) {
-		return alumnoRepository.findById(matricula);
+	public Alumno retrive(Integer matricula) {
+		log.info("EStoy el el retrive");
+		return alumnoRepository.findById(matricula).get();
 	}
 	
 	/**
