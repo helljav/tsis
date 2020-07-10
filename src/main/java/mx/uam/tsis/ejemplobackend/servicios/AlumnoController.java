@@ -130,20 +130,14 @@ public class AlumnoController {
 	@PutMapping(path = "/alumnos/{matricula}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity <?> update(@PathVariable("matricula") Integer matricula, @RequestBody  Alumno updateAlumno){
 		
-		Alumno alumno = alumnoService.retrive(matricula);
+		boolean result = alumnoService.update(matricula,updateAlumno);
 		
-		if(alumno!=null) {
-			//log.info("Si existe un alumno "+updateAlumno);
-			if(alumnoService.update(matricula, updateAlumno)) {
-				alumno = alumnoService.retrive(matricula); 
-				return ResponseEntity.status(HttpStatus.OK).body(alumno);
-			}
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("El ID del alumno debe de coincidir");
-			
+		if(result) {
+			return ResponseEntity.status(HttpStatus.OK).body(updateAlumno);			
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
 		}
-		else {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontro el alumno");
-		}
+
 		
 	}
 	

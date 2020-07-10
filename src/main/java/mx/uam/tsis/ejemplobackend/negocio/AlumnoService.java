@@ -73,15 +73,32 @@ public class AlumnoService {
 	 * @return Si es que por alguna razon falla al actualizar mandara un false, de lo contraio un true
 	 */
 	public boolean update(Integer matricula, Alumno update) {
-		if(matricula != update.getMatricula()) {
-			if(alumnoRepository .save(update)==null) {
+		// Primero veo que si esté en la BD
+		Optional <Alumno> alumnoOpt = alumnoRepository.findById(matricula);
+		
+		if(alumnoOpt.isPresent()) {
+			if(matricula.equals(update.getMatricula())) {
+				Alumno alumno = alumnoOpt.get(); // Este es el que está en la bd
+				alumno.setCarrera(update.getCarrera());
+				alumno.setNombre(update.getNombre());
 				
-				return false;			
+				log.info("Persistiendo los cambios "+alumno.getCarrera());
+				
+				alumnoRepository.save(alumno); // Persisto los cambios
+				
+				return true;
 			}
-			return true;
+			else {
+				log.info("Soy falso? M: "+matricula+" UM:"+update.getMatricula());
+				return false;
+			}
+			
 			
 		}
-		return false;
+		else {
+			return false;
+		}
+		
 		
 		
 	}
@@ -92,8 +109,18 @@ public class AlumnoService {
 	 * @param matricula ID del alumno a eliminar
 	 * @return True si fue exitoso, false si no pudo hacerlo
 	 */
-	public void delete(Integer matricula) {
-		alumnoRepository.deleteById(matricula);
+	public boolean delete(Integer matricula) {
+		Optional<Alumno> alumno = alumnoRepository.findById(matricula);
+		
+		if(alumno.get()!=null) {
+			alumnoRepository.deleteById(matricula);
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+		
 		
 	}
 	
